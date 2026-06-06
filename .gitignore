@@ -32,6 +32,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local dev artifacts
+/screenshots
+/supabase/.branches
+/supabase/.temp
+
 # typescript
 *.tsbuildinfo
 

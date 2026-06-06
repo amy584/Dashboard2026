@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
   const { data: nudge } = await supabase
     .from("nudges")
-    .select("*, suggestions(*), important_dates(title)")
+    .select("*, suggestions!nudges_suggestion_id_fkey(*), important_dates(title)")
     .eq("id", nudgeId)
     .single();
   if (!nudge) return NextResponse.json({ error: "not_found" }, { status: 404 });

@@ -116,12 +116,12 @@ export function OutsourceFlow({ nudgeId }: { nudgeId: string }) {
             <div className="flex gap-2">
               <input
                 type="datetime-local"
-                className="field"
+                className="field min-w-0 flex-1"
                 value={manualTime}
                 onChange={(e) => setManualTime(e.target.value)}
               />
               <button
-                className="btn-secondary shrink-0"
+                className="btn-secondary shrink-0 px-4"
                 onClick={() => loadDraft(new Date(manualTime).toISOString())}
                 disabled={!manualTime}
               >

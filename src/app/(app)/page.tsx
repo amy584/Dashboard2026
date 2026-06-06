@@ -15,7 +15,9 @@ export default async function HomePage() {
   // Active nudge (if any) with its suggestion.
   const { data: activeNudge } = await supabase
     .from("nudges")
-    .select("*, suggestions(*), important_dates(title, type)")
+    // Disambiguate: two FKs exist between nudges and suggestions, so name the one
+    // that points from this nudge to its chosen suggestion.
+    .select("*, suggestions!nudges_suggestion_id_fkey(*), important_dates(title, type)")
     .in("status", ["active", "snoozed"])
     .order("escalation_level", { ascending: false })
     .limit(1)

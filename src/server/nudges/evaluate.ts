@@ -51,7 +51,7 @@ export async function evaluateNudges(admin: DB, now = new Date()): Promise<Evalu
   // Work through open nudges.
   const { data: nudges } = await admin
     .from("nudges")
-    .select("*, users!inner(*), important_dates(title, type), suggestions(kind)")
+    .select("*, users!inner(*), important_dates(title, type), suggestions!nudges_suggestion_id_fkey(kind)")
     .in("status", ["scheduled", "active", "snoozed"]);
 
   const sender = getNotificationSender();
