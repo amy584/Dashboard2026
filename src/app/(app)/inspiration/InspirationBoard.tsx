@@ -179,7 +179,7 @@ export function InspirationBoard({ userId, partnerId }: { userId: string; partne
         <div className="grid grid-cols-1 gap-3">
           {visible.map((item) => (
             <div key={item.id} className="card">
-              <p className="text-xs uppercase tracking-wide text-brass">{item.category}</p>
+              <p className="text-xs uppercase tracking-wide text-stone">{item.category}</p>
               <p className="font-medium text-navy">
                 {item.place_name ?? item.caption_text ?? item.source_url}
               </p>

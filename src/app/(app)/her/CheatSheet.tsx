@@ -58,7 +58,7 @@ export function CheatSheet({ partner }: { partner: PartnerRow }) {
   return (
     <div className="space-y-6 py-2">
       <header>
-        <p className="text-xs uppercase tracking-widest text-brass">{dict.her.title}</p>
+        <p className="text-xs uppercase tracking-widest text-stone">{dict.her.title}</p>
         <h1 className="font-display text-3xl text-navy">{partner.name}</h1>
         {partner.term_of_endearment && (
           <p className="italic text-navy/50">“{partner.term_of_endearment}”</p>
@@ -111,7 +111,7 @@ export function CheatSheet({ partner }: { partner: PartnerRow }) {
                   </div>
                   <div className="flex items-center gap-3 text-sm">
                     {f.confidence === "inferred" && (
-                      <button className="text-brass" onClick={() => confirmInferred(f.id)}>
+                      <button className="text-stone" onClick={() => confirmInferred(f.id)}>
                         {dict.her.confirmFact}
                       </button>
                     )}

@@ -7,8 +7,8 @@
  */
 export const nl = {
   brand: {
-    name: "Attentt",
-    tagline: "Zij onthoudt alles. Jij niet.",
+    name: "Attent",
+    tagline: "Thoughtful on autopilot.",
   },
 
   // Splash shown briefly on each login / app open (§ login splash).
@@ -71,7 +71,7 @@ export const nl = {
     progress: "Stap {step} van {total}",
     account: {
       title: "Begin hier",
-      subtitle: "Eén account. Daarna onthoudt Attentt de rest.",
+      subtitle: "Eén account. Daarna onthoudt Attent de rest.",
     },
     aboutYou: {
       title: "Over jou",
@@ -109,7 +109,7 @@ export const nl = {
     permissions: {
       title: "Twee laatste dingen",
       notifications: "Meldingen",
-      notificationsWhy: "Zodat Attentt je op het juiste moment porren kan.",
+      notificationsWhy: "Zodat Attent je op het juiste moment porren kan.",
       calendar: "Agenda koppelen",
       calendarWhy: "Zodat we een vrij moment vinden als je iets uitbesteedt.",
       enable: "Aanzetten",
@@ -123,7 +123,7 @@ export const nl = {
     nextUp: "Binnenkort",
     activeNudgeKicker: "Tijd voor actie",
     selfDo: "Ik regel het zelf",
-    outsource: "Laat Attentt het regelen",
+    outsource: "Laat Attent het regelen",
     seeIdea: "Bekijk het idee",
     snooze: "Later",
     dismiss: "Niet nu",
@@ -176,7 +176,7 @@ export const nl = {
     title: "Inspiratie",
     pasteLabel: "Plak een link",
     pastePlaceholder: "Plak een Instagram-reel of andere link…",
-    pasteHelp: "Zij stuurt jou de reels die ze leuk vindt. Attentt onthoudt ze.",
+    pasteHelp: "Zij stuurt jou de reels die ze leuk vindt. Attent onthoudt ze.",
     parse: "Ophalen",
     parsing: "Aan het ophalen…",
     previewTitle: "Klopt dit?",
@@ -216,7 +216,7 @@ export const nl = {
   },
 
   outsource: {
-    title: "Laat Attentt het regelen",
+    title: "Laat Attent het regelen",
     checkingCalendar: "Agenda checken…",
     pickTime: "Kies een moment",
     partySize: "Aantal personen",

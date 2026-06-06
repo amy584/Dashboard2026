@@ -1,5 +1,5 @@
 -- ============================================================================
--- Attentt — initial schema (§4)
+-- Attent — initial schema (§4)
 -- All tables use UUID primary keys and created_at/updated_at timestamps.
 -- Row Level Security is enabled in 0002_rls_policies.sql so a user can only
 -- ever read/write his own rows.

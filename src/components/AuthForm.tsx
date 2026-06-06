@@ -30,7 +30,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         // Reset the splash gate so the welcome shows on this fresh login.
-        sessionStorage.removeItem("attentt_splash_shown");
+        sessionStorage.removeItem("attent_splash_shown");
         router.push("/");
         router.refresh();
       }
@@ -43,7 +43,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
   async function handleGoogle() {
     setError(null);
-    sessionStorage.removeItem("attentt_splash_shown");
+    sessionStorage.removeItem("attent_splash_shown");
     // Google OAuth also primes calendar access later (§3).
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",

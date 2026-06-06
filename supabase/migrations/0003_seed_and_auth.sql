@@ -1,5 +1,5 @@
 -- ============================================================================
--- Attentt — global escalation defaults (§4/§6) + auth bootstrap
+-- Attent — global escalation defaults (§4/§6) + auth bootstrap
 -- ============================================================================
 
 -- Global escalation ladder (user_id NULL). delay_hours is the wait since the

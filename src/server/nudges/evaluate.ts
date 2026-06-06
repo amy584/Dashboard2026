@@ -102,7 +102,7 @@ export async function evaluateNudges(admin: DB, now = new Date()): Promise<Evalu
     const kind: SuggestionKind =
       (n as unknown as { suggestions?: { kind: SuggestionKind } }).suggestions?.kind ?? "message";
     const title =
-      (n as unknown as { important_dates?: { title: string } }).important_dates?.title ?? "Attentt";
+      (n as unknown as { important_dates?: { title: string } }).important_dates?.title ?? "Attent";
     const days = n.target_date ? daysUntil(new Date(n.target_date), now) : 0;
 
     const copy = notificationCopy(kind, decision.newLevel, tone, { name: title, days });

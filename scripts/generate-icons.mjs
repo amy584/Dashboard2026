@@ -5,8 +5,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const NAVY = [0x1f, 0x2a, 0x44];
-const BRASS = [0xc6, 0xa2, 0x6b];
+const NAVY = [0x0f, 0x27, 0x40];
+const ACCENT = [0xc9, 0x6e, 0x4b]; // terracotta
 
 function crc32(buf) {
   let c = ~0;
@@ -38,7 +38,7 @@ function makePng(size) {
     raw[y * rowLen] = 0;
     for (let x = 0; x < size; x++) {
       const inDot = (x - cx) ** 2 + (y - cy) ** 2 <= r * r;
-      const [rr, gg, bb] = inDot ? BRASS : NAVY;
+      const [rr, gg, bb] = inDot ? ACCENT : NAVY;
       const o = y * rowLen + 1 + x * 4;
       raw[o] = rr;
       raw[o + 1] = gg;

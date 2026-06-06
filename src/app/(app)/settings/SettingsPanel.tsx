@@ -39,7 +39,7 @@ export function SettingsPanel({
     const blob = await res.blob();
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "attentt-export.json";
+    a.download = "attent-export.json";
     a.click();
     URL.revokeObjectURL(a.href);
   }
@@ -54,7 +54,7 @@ export function SettingsPanel({
   async function signOut() {
     await supabase.auth.signOut();
     // Let the welcome splash show again on the next login.
-    sessionStorage.removeItem("attentt_splash_shown");
+    sessionStorage.removeItem("attent_splash_shown");
     router.push("/sign-in");
     router.refresh();
   }

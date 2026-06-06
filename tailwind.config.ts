@@ -1,25 +1,29 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Attentt brand tokens (§13). Matches the palette from the attentt-story
- * artifact: warm, premium, calm. Navy reassurance, terracotta as the
- * action/escalation accent, cream surfaces.
+ * Attent brand kit tokens (§13).
+ * Palette: Terracotta (primary/CTA), Signature Navy (typography/bg, not black),
+ * Soft Cream (surfaces), Stone Taupe (secondary text/icons). Warm, premium,
+ * simple, thoughtful — Aesop / Aman / Buck Mason register.
  */
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        navy: "#1F2A44",
-        terracotta: "#C96E4B",
-        cream: "#F6F2EB",
-        sand: "#DCCFC0",
-        brass: "#C6A26B",
-        ink: "#23211E",
+        terracotta: "#C96E4B", // primary brand — logo, CTA, highlights
+        navy: "#0F2740", // Signature Navy — typography, app bg, premium accents
+        cream: "#F2ECE4", // Soft Cream — surfaces/backgrounds
+        stone: "#7A6E63", // Stone Taupe — secondary text, icons, supporting
+        // `sand` is a derived warm neutral (between cream and stone) used for
+        // the outer frame, chips and hairline borders — not a kit colour.
+        sand: "#E4D9CC",
       },
       fontFamily: {
-        // Loaded via next/font in layout.tsx and exposed as CSS variables.
-        display: ["var(--font-playfair)", "Georgia", "serif"],
+        // Logo + headlines: Canela (commercial, self-hosted via @font-face).
+        // Playfair Display is loaded as a graceful fallback until Canela ships.
+        display: ["Canela", "var(--font-playfair)", "Georgia", "serif"],
+        // UI + body: Inter (Medium for UI, Regular for body — by weight).
         body: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       maxWidth: {

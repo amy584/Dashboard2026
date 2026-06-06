@@ -1,4 +1,4 @@
-# Security at Attentt
+# Security at Attent
 
 ## Access control — Row Level Security everywhere
 

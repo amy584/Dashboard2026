@@ -12,7 +12,7 @@ body {
 }
 
 body {
-  @apply bg-sand text-ink font-body antialiased;
+  @apply bg-sand text-navy font-body antialiased;
 }
 
 /* App is a centered mobile column on larger screens (§13: max ~480px). */
@@ -23,7 +23,8 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--font-playfair), Georgia, serif;
+  /* Canela (commercial, self-hosted) with Playfair Display as a fallback. */
+  font-family: "Canela", var(--font-playfair), Georgia, serif;
 }
 
 /* Large, comfortable tap targets for mobile. */

@@ -1,8 +1,8 @@
 {
-  "name": "attentt",
+  "name": "attent",
   "version": "0.1.0",
   "private": true,
-  "description": "Attentt — she remembers everything, you don't have to. A mobile-first PWA that helps men remember and execute thoughtful gestures for their partner.",
+  "description": "Attent — she remembers everything, you don't have to. A mobile-first PWA that helps men remember and execute thoughtful gestures for their partner.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

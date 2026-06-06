@@ -1,5 +1,5 @@
 -- ============================================================================
--- Attentt — Row Level Security (§4, §12)
+-- Attent — Row Level Security (§4, §12)
 -- A user may only ever read/write rows that belong to him. The service-role
 -- key (used by cron/webhooks) bypasses RLS by design and is server-only.
 -- ============================================================================

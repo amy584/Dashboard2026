@@ -6,7 +6,7 @@ import { mkdirSync } from "node:fs";
 const BASE = process.env.SHOT_BASE_URL || "http://localhost:3000";
 const OUT = "screenshots";
 mkdirSync(OUT, { recursive: true });
-const USER = { email: "daan@attentt.test", password: "attentt123" };
+const USER = { email: "daan@attent.test", password: "attent123" };
 
 async function shoot(page, name, settle = 900) {
   await page.waitForTimeout(settle);

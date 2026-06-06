@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1F2A44", // navy (§11)
+  themeColor: "#0F2740", // Signature Navy (§11)
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,

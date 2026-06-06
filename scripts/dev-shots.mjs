@@ -6,8 +6,8 @@ const BASE = process.env.SHOT_BASE_URL || "http://localhost:3000";
 const OUT = "screenshots";
 mkdirSync(OUT, { recursive: true });
 
-const PRIMARY = { email: "daan@attentt.test", password: "attentt123" };
-const NEWUSER = { email: "nieuw@attentt.test", password: "attentt123" };
+const PRIMARY = { email: "daan@attent.test", password: "attent123" };
+const NEWUSER = { email: "nieuw@attent.test", password: "attent123" };
 
 async function shoot(page, name) {
   await page.waitForTimeout(900); // let fonts + fade-in settle

@@ -34,7 +34,7 @@ async function appUserId(authId) {
 
 async function main() {
   // ── Primary demo user: fully set up ──
-  const authId = await ensureUser("daan@attentt.test", "attentt123");
+  const authId = await ensureUser("daan@attent.test", "attent123");
   const userId = await appUserId(authId);
   await admin.from("users").update({ first_name: "Daan", notifications_enabled: true }).eq("id", userId);
 
@@ -116,7 +116,7 @@ async function main() {
   ]);
 
   // ── Second user with NO partner, for onboarding screenshots ──
-  const newAuthId = await ensureUser("nieuw@attentt.test", "attentt123");
+  const newAuthId = await ensureUser("nieuw@attent.test", "attent123");
   const newUserId = await appUserId(newAuthId);
   await admin.from("partners").delete().eq("user_id", newUserId);
 

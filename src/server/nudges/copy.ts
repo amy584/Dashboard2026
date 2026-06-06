@@ -12,7 +12,7 @@ type CopyEntry = { title: string; body: string };
 
 const FALLBACK: Record<EscalationTone, CopyEntry> = {
   gentle: { title: "Idee voor {name}", body: "Iets leuks plannen deze week?" },
-  nudge: { title: "Nog {days} dagen", body: "Eén tik en Attentt regelt het." },
+  nudge: { title: "Nog {days} dagen", body: "Eén tik en Attent regelt het." },
   firm: { title: "Nog {days} dagen", body: "Nu plannen? Eén tik, en het staat." },
 };
 

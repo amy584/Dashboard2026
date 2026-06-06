@@ -1,13 +1,13 @@
 {
-  "name": "Attentt",
-  "short_name": "Attentt",
-  "description": "Zij onthoudt alles. Jij niet.",
+  "name": "Attent",
+  "short_name": "Attent",
+  "description": "Thoughtful on autopilot.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#F6F2EB",
-  "theme_color": "#1F2A44",
+  "background_color": "#F2ECE4",
+  "theme_color": "#0F2740",
   "icons": [
     {
       "src": "/icons/icon-192.png",

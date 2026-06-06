@@ -1,7 +1,7 @@
-/* Attentt service worker (§11): offline shell + Web Push handling. */
+/* Attent service worker (§11): offline shell + Web Push handling. */
 /* eslint-disable no-undef */
 
-const CACHE = "attentt-shell-v1";
+const CACHE = "attent-shell-v1";
 const SHELL = ["/", "/offline"];
 
 self.addEventListener("install", (event) => {
@@ -37,14 +37,14 @@ self.addEventListener("push", (event) => {
   try {
     data = event.data ? event.data.json() : {};
   } catch {
-    data = { title: "Attentt", body: event.data ? event.data.text() : "" };
+    data = { title: "Attent", body: event.data ? event.data.text() : "" };
   }
-  const title = data.title || "Attentt";
+  const title = data.title || "Attent";
   const options = {
     body: data.body || "",
     icon: "/icons/icon-192.png",
     badge: "/icons/badge-72.png",
-    tag: data.tag || "attentt-nudge",
+    tag: data.tag || "attent-nudge",
     data: { url: data.url || "/", nudgeId: data.nudgeId || null },
     requireInteraction: false,
   };

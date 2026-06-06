@@ -1,6 +1,6 @@
-# Privacy at Attentt
+# Privacy at Attent
 
-Attentt holds sensitive personal data — relationship details, notes about a
+Attent holds sensitive personal data — relationship details, notes about a
 **third party** (the partner, who is not the account holder), and calendar
 access. We build privacy-by-design. This document summarises the posture so a
 DPIA can be layered on top.
@@ -50,7 +50,7 @@ fields in manually.
 ## No autonomous side effects
 
 Nothing is booked, charged, or sent without an explicit user confirm. The
-outsource flow is strictly **draft → confirm → execute**, and Attentt never
+outsource flow is strictly **draft → confirm → execute**, and Attent never
 messages the partner directly (the user sends via their own channels).
 
 ## Audit logging

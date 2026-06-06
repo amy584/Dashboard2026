@@ -32,7 +32,7 @@ export const serverEnv = {
     return required("VAPID_PRIVATE_KEY", process.env.VAPID_PRIVATE_KEY);
   },
   get vapidSubject() {
-    return process.env.VAPID_SUBJECT ?? "mailto:hello@attentt.app";
+    return process.env.VAPID_SUBJECT ?? "mailto:hello@attent.app";
   },
   get anthropicApiKey() {
     return required("ANTHROPIC_API_KEY", process.env.ANTHROPIC_API_KEY);

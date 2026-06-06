@@ -120,7 +120,7 @@ function Group({
             <div key={r.id} className={`card ${muted ? "opacity-60" : ""} ${!r.is_active ? "opacity-50" : ""}`}>
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-brass">{TYPE_LABELS[r.type]}</p>
+                  <p className="text-xs uppercase tracking-wide text-stone">{TYPE_LABELS[r.type]}</p>
                   <p className="font-medium text-navy">{r.title}</p>
                   <p className="text-sm text-navy/55">
                     {r.date ?? r.recurrence_rule ?? "—"}

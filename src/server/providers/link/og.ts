@@ -20,7 +20,7 @@ export class OpenGraphLinkParser implements LinkParser {
     let html = "";
     try {
       const res = await fetch(url, {
-        headers: { "User-Agent": "AttenttBot/1.0 (+https://attentt.app)" },
+        headers: { "User-Agent": "AttentBot/1.0 (+https://attent.app)" },
         redirect: "follow",
       });
       if (res.ok) html = await res.text();

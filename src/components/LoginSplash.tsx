@@ -4,10 +4,16 @@ import { useEffect, useState } from "react";
 import { dict, t } from "@/lib/i18n";
 import { splashSlides } from "@/lib/splash";
 
-const SESSION_KEY = "attentt_splash_shown";
-const ROTATE_KEY = "attentt_splash_i";
+const SESSION_KEY = "attent_splash_shown";
 const VISIBLE_MS = 3000; // how long it stays before auto-fading
 const FADE_MS = 550;
+
+/** 1-based day of the year — drives the per-day slide rotation. */
+function dayOfYear(d: Date): number {
+  const start = Date.UTC(d.getFullYear(), 0, 0);
+  const now = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  return Math.floor((now - start) / 86_400_000);
+}
 
 /**
  * Brief, full-screen welcome shown on each login / app open. Picks an on-brand
@@ -33,15 +39,10 @@ export function LoginSplash({ firstName }: { firstName: string | null }) {
 
     if (!forced && sessionStorage.getItem(SESSION_KEY)) return; // already shown this session
 
-    // Rotate through the slides across logins so it doesn't repeat.
-    let index: number;
-    if (forced) {
-      index = Number(override) % splashSlides.length;
-    } else {
-      const prev = Number(localStorage.getItem(ROTATE_KEY) ?? "-1");
-      index = (prev + 1) % splashSlides.length;
-      localStorage.setItem(ROTATE_KEY, String(index));
-    }
+    // Rotate per day: the same photo + line all day, a different one tomorrow.
+    const index = forced
+      ? Number(override) % splashSlides.length
+      : dayOfYear(new Date()) % splashSlides.length;
     setSlideIndex(index);
     sessionStorage.setItem(SESSION_KEY, "1");
 
@@ -93,7 +94,7 @@ export function LoginSplash({ firstName }: { firstName: string | null }) {
         </p>
 
         <div className="pb-6">
-          <p className="text-sm uppercase tracking-widest text-brass">{welcome}</p>
+          <p className="text-sm uppercase tracking-widest text-stone">{welcome}</p>
           <h1 className="mt-2 font-display text-4xl leading-tight text-cream">{slide.line}</h1>
           <p className="mt-6 text-xs uppercase tracking-widest text-cream/60">
             {dict.splash.tapToEnter}

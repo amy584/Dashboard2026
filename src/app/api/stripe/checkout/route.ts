@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getPaymentProvider } from "@/server/providers/payment/stripe";
 import { publicEnv, serverEnv } from "@/lib/env";
 
-/** Start a subscription checkout for the Attentt membership (§10). */
+/** Start a subscription checkout for the Attent membership (§10). */
 export async function POST() {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });

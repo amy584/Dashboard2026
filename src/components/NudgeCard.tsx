@@ -13,16 +13,17 @@ interface Props {
 }
 
 /**
- * The one signature interaction (§13): the accent shifts from calm brass toward
+ * The one signature interaction (§13): the accent shifts from calm taupe toward
  * terracotta the longer a nudge stays unactioned. Copy is never guilt-trippy.
  */
 export function NudgeCard({ nudgeId, escalationLevel, title, daysLeft, suggestion }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
-  // Map escalation level (0..3+) to an accent colour between brass and terracotta.
+  // Map escalation level (0..3+) to an accent colour shifting from calm
+  // Stone Taupe toward terracotta the longer the nudge stays unactioned (§13).
   const intensity = Math.min(escalationLevel / 3, 1);
-  const accent = mix("#C6A26B", "#C96E4B", intensity);
+  const accent = mix("#7A6E63", "#C96E4B", intensity);
 
   async function act(op: "complete" | "snooze" | "dismiss") {
     setBusy(true);

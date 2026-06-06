@@ -38,7 +38,7 @@ export default async function HomePage() {
   return (
     <div className="space-y-6 py-2">
       <header className="animate-fade-up">
-        <p className="text-xs uppercase tracking-widest text-brass">{dict.brand.name}</p>
+        <p className="text-xs uppercase tracking-widest text-stone">{dict.brand.name}</p>
         <h1 className="font-display text-3xl text-navy">{greeting}</h1>
       </header>
 
@@ -80,7 +80,7 @@ export default async function HomePage() {
               const dl = d.date ? daysUntil(new Date(d.date), new Date()) : null;
               return (
                 <div key={d.id} className="card min-w-[160px] shrink-0">
-                  <p className="text-xs uppercase tracking-wide text-brass">
+                  <p className="text-xs uppercase tracking-wide text-stone">
                     {dateTypeLabel(d.type)}
                   </p>
                   <p className="mt-1 font-medium text-navy">{d.title}</p>

@@ -138,7 +138,7 @@ export function OnboardingFlow({
   return (
     <div className="app-shell px-6 py-8">
       <div className="flex items-center justify-between">
-        <p className="text-xs uppercase tracking-widest text-brass">
+        <p className="text-xs uppercase tracking-widest text-stone">
           {t(dict.onboarding.progress, { step, total: TOTAL })}
         </p>
         {step < TOTAL && (
