@@ -58,7 +58,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       <div className="relative h-64 w-full overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/moment-couch.png"
+          src="/images/moment-breakfast.png"
           alt=""
           className="absolute inset-0 h-full w-full object-cover"
         />

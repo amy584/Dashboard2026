@@ -10,12 +10,14 @@ export interface SplashSlide {
   line: string;
 }
 
+// Order matters: paired by index with dict.splash.lines. Index 0 (breakfast)
+// is the favourite and also the sign-in hero.
 const IMAGES = [
-  "/images/moment-yacht.png",
-  "/images/moment-couch.png",
-  "/images/moment-gift.png",
-  "/images/moment-paris.png",
-  "/images/moment-flowers.png",
+  "/images/moment-breakfast.png", // intimate small gesture
+  "/images/moment-yacht.png", // grand celebration
+  "/images/moment-app.png", // using Attent together
+  "/images/moment-gift.png", // the gift moment
+  "/images/moment-dinner.png", // date night
 ];
 
 export const splashSlides: SplashSlide[] = IMAGES.map((image, i) => ({

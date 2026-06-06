@@ -19,11 +19,11 @@ export const nl = {
     // Motivating, marketing-register lines on *why* he makes the effort.
     // Paired by index with the photos in src/lib/splash.ts.
     lines: [
-      "Grootse momenten beginnen met een klein gebaar.",
-      "Vijf minuten nu. Een glimlach die blijft.",
-      "Jij dacht eraan. Dat is alles wat telt.",
-      "Zij onthoudt hoe het voelde. Jij regelde het.",
-      "De verrassing is voor haar. De credits zijn voor jou.",
+      "Grootse momenten beginnen met een klein gebaar.", // breakfast
+      "Zij onthoudt hoe het voelde. Jij regelde het.", // yacht
+      "Vijf minuten nu. Een glimlach die blijft.", // app
+      "Jij dacht eraan. Dat is alles wat telt.", // gift
+      "De verrassing is voor haar. De credits zijn voor jou.", // dinner
     ],
   },
 

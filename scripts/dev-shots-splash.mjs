@@ -38,7 +38,7 @@ const main = async () => {
   await page.waitForTimeout(3500); // let it auto-fade away
 
   // Forced variants to show each photo + line (?splash=N)
-  for (const i of [0, 2, 3]) {
+  for (const i of [0, 1, 2, 3, 4]) {
     await page.goto(`${BASE}/?splash=${i}`, { waitUntil: "networkidle" });
     await shoot(page, `12-splash-variant-${i}`, 1100);
     await page.waitForTimeout(3500);
