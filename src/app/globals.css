@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-sand text-ink font-body antialiased;
+}
+
+/* App is a centered mobile column on larger screens (§13: max ~480px). */
+.app-shell {
+  @apply mx-auto flex min-h-dvh max-w-app flex-col bg-cream;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+
+/* Large, comfortable tap targets for mobile. */
+.tap {
+  @apply min-h-12 select-none;
+}
+
+@layer components {
+  .btn {
+    @apply tap inline-flex items-center justify-center rounded-2xl px-5 py-3 text-base font-medium transition active:scale-[0.98];
+  }
+  .btn-primary {
+    @apply btn bg-terracotta text-cream shadow-sm hover:brightness-105;
+  }
+  .btn-secondary {
+    @apply btn border border-navy/15 bg-cream text-navy hover:bg-sand/60;
+  }
+  .btn-navy {
+    @apply btn bg-navy text-cream hover:brightness-110;
+  }
+  .card {
+    @apply rounded-3xl border border-navy/10 bg-cream p-5 shadow-sm;
+  }
+  .field {
+    @apply tap w-full rounded-2xl border border-navy/15 bg-white px-4 py-3 text-base outline-none focus:border-terracotta focus:ring-2 focus:ring-terracotta/20;
+  }
+  .label {
+    @apply mb-1 block text-sm font-medium text-navy/80;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full bg-sand px-3 py-1 text-xs font-medium text-navy;
+  }
+}
