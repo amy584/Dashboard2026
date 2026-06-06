@@ -50,5 +50,7 @@ export const config = {
   // Run on app routes only. Exclude static assets, the service worker/manifest,
   // and ALL /api routes — those handle their own auth (and webhooks/cron arrive
   // without a session cookie, so they must not be redirected to /sign-in).
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|icons|sw.js|manifest.webmanifest|api/).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|icons|images|sw.js|manifest.webmanifest|api/).*)",
+  ],
 };

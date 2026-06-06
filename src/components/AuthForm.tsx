@@ -29,6 +29,8 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        // Reset the splash gate so the welcome shows on this fresh login.
+        sessionStorage.removeItem("attentt_splash_shown");
         router.push("/");
         router.refresh();
       }
@@ -41,6 +43,7 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
 
   async function handleGoogle() {
     setError(null);
+    sessionStorage.removeItem("attentt_splash_shown");
     // Google OAuth also primes calendar access later (§3).
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -50,12 +53,23 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   }
 
   return (
-    <div className="app-shell justify-center px-6">
-      <div className="animate-fade-up">
-        <p className="font-display text-sm uppercase tracking-widest text-brass">
+    <div className="app-shell">
+      {/* Hero photo sets the premium, warm tone before sign-in (§13). */}
+      <div className="relative h-64 w-full overflow-hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/moment-couch.png"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-cream via-cream/20 to-navy/30" />
+        <p className="absolute left-6 top-6 font-display text-sm uppercase tracking-[0.3em] text-cream drop-shadow">
           {dict.brand.name}
         </p>
-        <h1 className="mt-2 font-display text-3xl text-navy">
+      </div>
+
+      <div className="-mt-6 flex-1 rounded-t-3xl bg-cream px-6 pt-6 animate-fade-up">
+        <h1 className="font-display text-3xl text-navy">
           {mode === "sign-in" ? dict.auth.signInTitle : dict.auth.signUpTitle}
         </h1>
         <p className="mt-1 italic text-navy/60">{dict.brand.tagline}</p>

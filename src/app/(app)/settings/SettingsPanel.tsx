@@ -53,6 +53,8 @@ export function SettingsPanel({
 
   async function signOut() {
     await supabase.auth.signOut();
+    // Let the welcome splash show again on the next login.
+    sessionStorage.removeItem("attentt_splash_shown");
     router.push("/sign-in");
     router.refresh();
   }
