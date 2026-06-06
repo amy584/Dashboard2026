@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     title: dict.brand.name,
     statusBarStyle: "default",
   },
+  // Favicon + Apple icon are provided by src/app/icon.png and
+  // src/app/apple-icon.png (Next.js file conventions). PWA install icons are
+  // declared in manifest.webmanifest.
 };
 
 export const viewport: Viewport = {

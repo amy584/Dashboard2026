@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { dict, t } from "@/lib/i18n";
 import { splashSlides } from "@/lib/splash";
+import { Logo } from "@/components/Logo";
 
 const SESSION_KEY = "attent_splash_shown";
 const VISIBLE_MS = 3000; // how long it stays before auto-fading
@@ -89,12 +90,10 @@ export function LoginSplash({ firstName }: { firstName: string | null }) {
 
       {/* Content */}
       <div className="relative mx-auto flex h-full max-w-app flex-col justify-between p-8">
-        <p className="font-display text-sm uppercase tracking-[0.3em] text-cream/90">
-          {dict.brand.name}
-        </p>
+        <Logo tone="light" withMark={false} className="text-2xl" />
 
         <div className="pb-6">
-          <p className="text-sm uppercase tracking-widest text-stone">{welcome}</p>
+          <p className="text-sm uppercase tracking-widest text-cream/70">{welcome}</p>
           <h1 className="mt-2 font-display text-4xl leading-tight text-cream">{slide.line}</h1>
           <p className="mt-6 text-xs uppercase tracking-widest text-cream/60">
             {dict.splash.tapToEnter}

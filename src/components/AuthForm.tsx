@@ -6,6 +6,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { publicEnv } from "@/lib/env";
 import { dict } from "@/lib/i18n";
+import { Logo } from "@/components/Logo";
 
 export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
   const router = useRouter();
@@ -63,9 +64,9 @@ export function AuthForm({ mode }: { mode: "sign-in" | "sign-up" }) {
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-cream via-cream/20 to-navy/30" />
-        <p className="absolute left-6 top-6 font-display text-sm uppercase tracking-[0.3em] text-cream drop-shadow">
-          {dict.brand.name}
-        </p>
+        <div className="absolute left-6 top-6 drop-shadow">
+          <Logo tone="light" withMark={false} className="text-2xl" />
+        </div>
       </div>
 
       <div className="-mt-6 flex-1 rounded-t-3xl bg-cream px-6 pt-6 animate-fade-up">
