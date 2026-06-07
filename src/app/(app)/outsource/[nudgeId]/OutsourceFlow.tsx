@@ -18,8 +18,9 @@ function euro(cents: number) {
   return cents > 0 ? `€${(cents / 100).toFixed(2)}` : dict.suggestion.free;
 }
 
-export function OutsourceFlow({ nudgeId }: { nudgeId: string }) {
+export function OutsourceFlow({ id, source }: { id: string; source: "nudge" | "suggestion" }) {
   const router = useRouter();
+  const targetBody = source === "suggestion" ? { suggestionId: id } : { nudgeId: id };
   const [draft, setDraft] = useState<Draft | null>(null);
   const [occasion, setOccasion] = useState("");
   const [message, setMessage] = useState("");
@@ -33,7 +34,7 @@ export function OutsourceFlow({ nudgeId }: { nudgeId: string }) {
     const res = await fetch("/api/outsource/draft", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nudgeId, manualTime: time }),
+      body: JSON.stringify({ ...targetBody, manualTime: time }),
     });
     const data = await res.json();
     setDraft(data.draft);
@@ -46,7 +47,7 @@ export function OutsourceFlow({ nudgeId }: { nudgeId: string }) {
   useEffect(() => {
     loadDraft();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nudgeId]);
+  }, [id]);
 
   async function confirm() {
     if (!draft) return;
@@ -54,7 +55,7 @@ export function OutsourceFlow({ nudgeId }: { nudgeId: string }) {
     const res = await fetch("/api/outsource/confirm", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nudgeId, draft, occasion, approvedMessage: message }),
+      body: JSON.stringify({ ...targetBody, draft, occasion, approvedMessage: message }),
     });
     const { result } = await res.json();
     setPhase(result?.status === "completed" ? "done" : "failed");

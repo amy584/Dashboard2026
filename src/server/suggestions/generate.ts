@@ -1,23 +1,36 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Database } from "@/lib/supabase/types";
-import { getAIClient } from "@/server/providers/ai";
+import type { Database, SuggestionKind } from "@/lib/supabase/types";
+import { getAIClient, type SuggestionInput } from "@/server/providers/ai";
 import { logAudit } from "@/server/audit";
 
 type DB = SupabaseClient<Database>;
 
-/**
- * Generate 1–3 grounded suggestions for a user/partner (§9). Inputs come from
- * the structured cheat sheet, recent inspiration, the date type and past
- * actions. The AI composes brand-voice copy but is strictly grounded — it only
- * uses the facts we pass and must respect the dislikes/no-go list.
- */
-export async function generateSuggestionsForNudge(
-  db: DB,
-  opts: { userId: string; partnerId: string | null; nudgeId?: string; dateType: string },
-): Promise<string[]> {
-  const { partnerId } = opts;
-  if (!partnerId) return [];
+const KINDS: SuggestionKind[] = ["flowers", "reservation", "gift", "message", "experience"];
+const MONTH_MS = 30 * 24 * 3_600_000;
 
+/** Months since the last completed gesture of each kind (null = never). */
+function computeRecency(
+  actions: { kind: string; completed_at: string | null; created_at: string }[],
+): Record<string, number | null> {
+  const latest: Record<string, number> = {};
+  for (const a of actions) {
+    const ts = new Date(a.completed_at ?? a.created_at).getTime();
+    if (!latest[a.kind] || ts > latest[a.kind]) latest[a.kind] = ts;
+  }
+  const out: Record<string, number | null> = {};
+  for (const k of KINDS) {
+    out[k] = latest[k] ? Math.floor((Date.now() - latest[k]) / MONTH_MS) : null;
+  }
+  return out;
+}
+
+/** Gather the grounded inputs for the AI from the cheat sheet, inspiration and history. */
+async function gatherInput(
+  db: DB,
+  userId: string,
+  partnerId: string,
+  dateType: string,
+): Promise<{ input: SuggestionInput; partnerName: string }> {
   const [{ data: partner }, { data: facts }, { data: inspiration }, { data: pastActions }] =
     await Promise.all([
       db.from("partners").select("name, term_of_endearment").eq("id", partnerId).single(),
@@ -30,34 +43,43 @@ export async function generateSuggestionsForNudge(
         .limit(5),
       db
         .from("actions")
-        .select("kind")
-        .eq("user_id", opts.userId)
+        .select("kind, completed_at, created_at")
+        .eq("user_id", userId)
         .order("created_at", { ascending: false })
-        .limit(10),
+        .limit(20),
     ]);
 
   const dislikes = (facts ?? []).filter((f) => f.category === "dislike").map((f) => f.value);
 
-  const ai = getAIClient();
-  const generated = await ai.generateSuggestions({
-    dateType: opts.dateType,
+  return {
     partnerName: partner?.name ?? "haar",
-    facts: (facts ?? []).filter((f) => f.category !== "dislike"),
-    dislikes,
-    inspiration: inspiration ?? [],
-    pastActionKinds: (pastActions ?? []).map((a) => a.kind),
-  });
+    input: {
+      dateType,
+      partnerName: partner?.name ?? "haar",
+      facts: (facts ?? []).filter((f) => f.category !== "dislike"),
+      dislikes,
+      inspiration: inspiration ?? [],
+      pastActionKinds: (pastActions ?? []).map((a) => a.kind),
+      monthsSinceByKind: computeRecency(pastActions ?? []),
+    },
+  };
+}
 
-  await logAudit(db, opts.userId, "ai_call", { purpose: "suggestions", count: generated.length });
-
+async function storeSuggestions(
+  db: DB,
+  userId: string,
+  partnerId: string,
+  nudgeId: string | null,
+  generated: Awaited<ReturnType<ReturnType<typeof getAIClient>["generateSuggestions"]>>,
+): Promise<string[]> {
   const inserted: string[] = [];
   for (const s of generated) {
     const { data } = await db
       .from("suggestions")
       .insert({
-        user_id: opts.userId,
+        user_id: userId,
         partner_id: partnerId,
-        nudge_id: opts.nudgeId ?? null,
+        nudge_id: nudgeId,
         kind: s.kind,
         title: s.title,
         body: s.body,
@@ -70,11 +92,48 @@ export async function generateSuggestionsForNudge(
       .single();
     if (data) inserted.push(data.id);
   }
+  return inserted;
+}
 
-  // Link the top suggestion back to the nudge for the Home card.
+/** Suggestions tied to a nudge (when a date approaches). */
+export async function generateSuggestionsForNudge(
+  db: DB,
+  opts: { userId: string; partnerId: string | null; nudgeId?: string; dateType: string },
+): Promise<string[]> {
+  if (!opts.partnerId) return [];
+  const { input } = await gatherInput(db, opts.userId, opts.partnerId, opts.dateType);
+  const generated = await getAIClient().generateSuggestions(input);
+  await logAudit(db, opts.userId, "ai_call", { purpose: "suggestions", count: generated.length });
+
+  const inserted = await storeSuggestions(db, opts.userId, opts.partnerId, opts.nudgeId ?? null, generated);
   if (opts.nudgeId && inserted[0]) {
     await db.from("nudges").update({ suggestion_id: inserted[0] }).eq("id", opts.nudgeId);
   }
-
   return inserted;
+}
+
+/**
+ * Proactive, always-on suggestions (Fase 2): grounded in the cheat sheet +
+ * recency, not tied to a date. Old offered proactive suggestions are retired
+ * first so the Home feed stays fresh and small.
+ */
+export async function generateProactiveSuggestions(
+  db: DB,
+  opts: { userId: string; partnerId: string | null },
+): Promise<string[]> {
+  if (!opts.partnerId) return [];
+
+  // Retire previous proactive (no-nudge) offers so they don't pile up.
+  await db
+    .from("suggestions")
+    .update({ status: "rejected" })
+    .eq("user_id", opts.userId)
+    .is("nudge_id", null)
+    .eq("status", "offered");
+
+  const { input } = await gatherInput(db, opts.userId, opts.partnerId, "spontaan");
+  const generated = await getAIClient().generateSuggestions(input);
+  await logAudit(db, opts.userId, "ai_call", { purpose: "proactive_suggestions", count: generated.length });
+
+  return storeSuggestions(db, opts.userId, opts.partnerId, null, generated);
 }

@@ -121,6 +121,12 @@ export const nl = {
     calmTitle: "Je bent helemaal bij.",
     calmBody: "Niets dringends. We porren je als er iets aankomt.",
     nextUp: "Binnenkort",
+    proactiveTitle: "Voorgesteld voor jou",
+    proactiveEmpty:
+      "Nog geen ideeën. Vul haar cheat sheet verder of laad een reel — dan kom ik met voorstellen.",
+    generateIdeas: "Geef me ideeën",
+    refreshIdeas: "Nieuwe ideeën",
+    generating: "Even denken…",
     activeNudgeKicker: "Tijd voor actie",
     selfDo: "Ik regel het zelf",
     outsource: "Laat Attent het regelen",

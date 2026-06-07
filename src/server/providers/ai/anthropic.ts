@@ -50,8 +50,10 @@ export class AnthropicAIClient implements AIClient {
       "Voice: direct, benefit-driven, lightly cheeky, Dutch. " +
       "STRICT RULES: only use the facts provided; never invent details about the partner; " +
       "never suggest anything on the dislikes list; avoid repeating recent action kinds. " +
+      "Use monthsSinceByKind to gauge timing — if it has been a while (or never) for a kind, " +
+      "that is a strong reason to suggest it now and the 'why' may reference how long it's been. " +
       'Return ONLY a JSON array of 1-3 items: {kind,title,body,why,payload,estimatedCostCents}. ' +
-      'The "why" must reference a real fact or saved item.';
+      'The "why" must reference a real fact, saved item, or the recency.';
     const result = await this.json<GeneratedSuggestion[]>(system, JSON.stringify(input));
     return Array.isArray(result) ? result.slice(0, 3) : [];
   }

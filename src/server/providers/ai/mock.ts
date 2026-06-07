@@ -28,13 +28,19 @@ export class MockAIClient implements AIClient {
 
   async generateSuggestions(input: SuggestionInput): Promise<GeneratedSuggestion[]> {
     const out: GeneratedSuggestion[] = [];
+    const months = input.monthsSinceByKind ?? {};
+    const recencyNote = (kind: string) => {
+      const m = months[kind];
+      if (m === null || m === undefined) return "";
+      return m >= 1 ? ` Het is ~${m} ${m === 1 ? "maand" : "maanden"} geleden.` : "";
+    };
     const flowers = input.facts.find((f) => f.category === "flowers");
-    if (flowers && !input.pastActionKinds.includes("flowers")) {
+    if (flowers) {
       out.push({
         kind: "flowers",
         title: `${flowers.value} voor ${input.partnerName}`,
         body: "Een klein gebaar dat altijd raak is.",
-        why: `${flowers.value} staat op haar cheat sheet.`,
+        why: `${flowers.value} staat op haar cheat sheet.${recencyNote("flowers")}`,
         payload: { flower_type: flowers.value },
         estimatedCostCents: 3500,
       });
