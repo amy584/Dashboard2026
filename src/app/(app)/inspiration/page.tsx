@@ -5,5 +5,5 @@ export default async function InspirationPage() {
   const user = await getCurrentUser();
   if (!user) return null;
   const partner = await getPartner(user.id);
-  return <InspirationBoard userId={user.id} partnerId={partner?.id ?? null} />;
+  return <InspirationBoard partnerId={partner?.id ?? null} />;
 }

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { dict } from "@/lib/i18n";
+import { dict, t } from "@/lib/i18n";
 import type { InspirationCategory, InspirationItemRow } from "@/lib/supabase/types";
 
 interface Preview {
@@ -18,7 +18,7 @@ interface Preview {
 
 const CATEGORIES: InspirationCategory[] = ["restaurant", "flowers", "travel", "gift", "other"];
 
-export function InspirationBoard({ userId, partnerId }: { userId: string; partnerId: string | null }) {
+export function InspirationBoard({ partnerId }: { partnerId: string | null }) {
   const supabase = createClient();
   const [url, setUrl] = useState("");
   const [parsing, setParsing] = useState(false);
@@ -26,6 +26,7 @@ export function InspirationBoard({ userId, partnerId }: { userId: string; partne
   const [items, setItems] = useState<InspirationItemRow[]>([]);
   const [filter, setFilter] = useState<InspirationCategory | "all">("all");
   const [error, setError] = useState<string | null>(null);
+  const [learned, setLearned] = useState<number | null>(null);
 
   const load = useCallback(async () => {
     const { data } = await supabase
@@ -69,19 +70,23 @@ export function InspirationBoard({ userId, partnerId }: { userId: string; partne
   }
 
   async function savePreview(p: Preview) {
-    await supabase.from("inspiration_items").insert({
-      user_id: userId,
-      partner_id: partnerId,
-      source_url: p.source_url,
-      platform: p.platform as InspirationItemRow["platform"],
-      media_thumbnail_url: p.media_thumbnail_url,
-      place_name: p.place_name,
-      place_city: p.place_city,
-      category: p.category,
-      caption_text: p.caption_text,
-      extracted_json: p.extracted_json,
-      added_by: "user",
+    // Server saves the item AND auto-learns cheat-sheet facts from it.
+    const res = await fetch("/api/inspiration/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source_url: p.source_url,
+        platform: p.platform,
+        media_thumbnail_url: p.media_thumbnail_url,
+        caption_text: p.caption_text,
+        place_name: p.place_name,
+        place_city: p.place_city,
+        category: p.category,
+        extracted_json: p.extracted_json,
+      }),
     });
+    const data = res.ok ? await res.json() : { savedFacts: 0 };
+    setLearned(data.savedFacts ?? 0);
     setPreview(null);
     setUrl("");
     load();
@@ -124,6 +129,12 @@ export function InspirationBoard({ userId, partnerId }: { userId: string; partne
         </div>
         <p className="mt-2 text-sm text-navy/50">{dict.inspiration.pasteHelp}</p>
       </section>
+
+      {learned !== null && (
+        <p className="rounded-2xl border border-terracotta/30 bg-terracotta/10 p-3 text-sm text-navy">
+          {learned > 0 ? t(dict.inspiration.learned, { n: learned }) : dict.inspiration.saved}
+        </p>
+      )}
 
       {preview && (
         <section className="card border-terracotta">

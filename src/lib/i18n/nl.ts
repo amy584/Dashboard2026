@@ -182,6 +182,8 @@ export const nl = {
     previewTitle: "Klopt dit?",
     saveItem: "Bewaren",
     manualAdd: "Handmatig toevoegen",
+    learned: "Attent onthield {n} nieuwe dingen over haar.",
+    saved: "Bewaard in inspiratie.",
     feedEmpty: "Nog geen inspiratie. Plak een link om te beginnen.",
     filterAll: "Alles",
     toFact: "Naar cheat sheet",
