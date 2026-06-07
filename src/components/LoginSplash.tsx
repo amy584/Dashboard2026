@@ -71,7 +71,7 @@ export function LoginSplash({ firstName }: { firstName: string | null }) {
       role="button"
       aria-label={dict.splash.tapToEnter}
       onClick={() => setPhase("out")}
-      className="fixed inset-0 z-50 overflow-hidden bg-navy transition-opacity duration-500"
+      className="fixed left-1/2 top-0 z-50 h-dvh w-full max-w-app -translate-x-1/2 overflow-hidden bg-navy transition-opacity duration-500"
       style={{ opacity: phase === "in" ? 1 : 0 }}
     >
       {/* Photo */}
