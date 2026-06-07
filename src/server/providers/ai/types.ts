@@ -22,6 +22,9 @@ export interface SuggestionInput {
   dislikes: string[];
   inspiration: { place_name: string | null; place_city: string | null; category: string }[];
   pastActionKinds: string[];
+  /** Months since the last gesture of each kind (null = never done). Lets the
+   *  "why" reference recency, e.g. "het is 3 maanden geleden sinds bloemen". */
+  monthsSinceByKind?: Record<string, number | null>;
   pricePreference?: "low" | "mid" | "high";
 }
 

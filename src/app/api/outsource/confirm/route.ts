@@ -17,27 +17,32 @@ export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
-  const { nudgeId, draft, occasion, approvedMessage } = (await request.json()) as {
-    nudgeId: string;
+  const { nudgeId, suggestionId, draft, occasion, approvedMessage } = (await request.json()) as {
+    nudgeId?: string;
+    suggestionId?: string;
     draft: OutsourceDraft;
     occasion: string;
     approvedMessage: string;
   };
   const supabase = await createClient();
 
-  const { data: nudge } = await supabase
-    .from("nudges")
-    .select("suggestion_id")
-    .eq("id", nudgeId)
-    .single();
+  let linkedSuggestionId: string | null = suggestionId ?? null;
+  if (nudgeId) {
+    const { data: nudge } = await supabase
+      .from("nudges")
+      .select("suggestion_id")
+      .eq("id", nudgeId)
+      .single();
+    linkedSuggestionId = nudge?.suggestion_id ?? null;
+  }
 
   // Create the action first so its id is the idempotency key for side effects.
   const { data: action, error: actionErr } = await supabase
     .from("actions")
     .insert({
       user_id: user.id,
-      suggestion_id: nudge?.suggestion_id ?? null,
-      nudge_id: nudgeId,
+      suggestion_id: linkedSuggestionId,
+      nudge_id: nudgeId ?? null,
       kind: draft.kind,
       mode: "outsourced",
       status: "drafted",
@@ -80,14 +85,20 @@ export async function POST(request: NextRequest) {
     .eq("id", action.id);
 
   if (result.status === "completed") {
-    await supabase
-      .from("nudges")
-      .update({ status: "completed", completed_action_id: action.id })
-      .eq("id", nudgeId);
+    if (nudgeId) {
+      await supabase
+        .from("nudges")
+        .update({ status: "completed", completed_action_id: action.id })
+        .eq("id", nudgeId);
+    }
+    if (linkedSuggestionId) {
+      await supabase.from("suggestions").update({ status: "outsourced" }).eq("id", linkedSuggestionId);
+    }
   }
 
   await logAudit(supabase, user.id, "outsource_confirmed", {
-    nudgeId,
+    nudgeId: nudgeId ?? null,
+    suggestionId: linkedSuggestionId,
     actionId: action.id,
     status: result.status,
   });

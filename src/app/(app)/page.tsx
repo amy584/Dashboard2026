@@ -4,6 +4,7 @@ import { getCurrentUser, getPartner } from "@/server/db";
 import { dict, t } from "@/lib/i18n";
 import { daysUntil } from "@/server/nudges/engine";
 import { NudgeCard } from "@/components/NudgeCard";
+import { ProactiveSuggestions } from "@/components/ProactiveSuggestions";
 
 /** Home / Today (§5): the most relevant thing right now. */
 export default async function HomePage() {
@@ -42,7 +43,7 @@ export default async function HomePage() {
         <h1 className="font-display text-3xl text-navy">{greeting}</h1>
       </header>
 
-      {activeNudge ? (
+      {activeNudge && (
         <NudgeCard
           nudgeId={activeNudge.id}
           escalationLevel={activeNudge.escalation_level}
@@ -60,12 +61,10 @@ export default async function HomePage() {
               .suggestions ?? null
           }
         />
-      ) : (
-        <section className="card border-navy/15 bg-navy text-cream animate-fade-up">
-          <h2 className="font-display text-2xl">{dict.home.calmTitle}</h2>
-          <p className="mt-1 text-cream/70">{dict.home.calmBody}</p>
-        </section>
       )}
+
+      {/* Proactive, always-on ideas grounded in the cheat sheet + recency (Fase 2). */}
+      <ProactiveSuggestions />
 
       <section>
         <div className="mb-2 flex items-center justify-between">
