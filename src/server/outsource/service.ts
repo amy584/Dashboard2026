@@ -14,6 +14,7 @@ import type { CalendarProvider } from "@/server/providers/calendar/types";
 import type { FulfilmentProvider, FulfilmentKind } from "@/server/providers/fulfilment/types";
 import type { PaymentProvider } from "@/server/providers/payment/types";
 import type { AIClient } from "@/server/providers/ai/types";
+import { formatAddress, type ConciergeAddress } from "@/server/providers/fulfilment/providers";
 import type { SuggestionKind } from "@/lib/supabase/types";
 
 export interface OutsourceContext {
@@ -34,6 +35,9 @@ export interface DraftRequest {
   durationMinutes?: number;
   /** User-picked time when no calendar is connected. */
   manualTime?: string;
+  /** Concierge-prep (Fase 3): where it's delivered + who's sending. */
+  recipient?: ConciergeAddress;
+  sender?: { name?: string | null; phone?: string | null };
 }
 
 export interface OutsourceDraft {
@@ -44,6 +48,8 @@ export interface OutsourceDraft {
   messageDraft: string;
   fulfilmentDetails: Record<string, unknown>;
   externalActionUrl?: string;
+  providerName?: string;
+  checklist?: string[];
 }
 
 const FULFILLABLE: SuggestionKind[] = ["reservation", "flowers", "gift"];
@@ -64,21 +70,34 @@ export async function assembleDraft(
     proposedTime = slots[0]?.start ?? null;
   }
 
-  // 2. Build the gesture draft (no booking).
+  // 2. Build the gesture draft (no booking). Thread in addresses + delivery
+  //    moment so the external site can be filled in seconds.
   let summary = "";
   let estimatedCostCents = 0;
   let fulfilmentDetails: Record<string, unknown> = {};
   let externalActionUrl: string | undefined;
+  let providerName: string | undefined;
+  let checklist: string[] | undefined;
 
   if (FULFILLABLE.includes(req.suggestionKind)) {
     const draft = await ctx.fulfilment.draft({
       kind: req.suggestionKind as FulfilmentKind,
-      payload: { ...req.payload, time: proposedTime ?? req.payload.time },
+      payload: {
+        ...req.payload,
+        time: proposedTime ?? req.payload.time,
+        deliveryDate: proposedTime ?? req.payload.time ?? req.window?.from,
+        recipientName: req.recipient?.name ?? req.partnerName,
+        recipientAddress: formatAddress(req.recipient),
+        senderName: req.sender?.name ?? undefined,
+        senderPhone: req.sender?.phone ?? undefined,
+      },
     });
     summary = draft.summary;
     estimatedCostCents = draft.estimatedCostCents;
     fulfilmentDetails = draft.details;
     externalActionUrl = draft.externalActionUrl;
+    providerName = draft.providerName;
+    checklist = draft.checklist;
   } else {
     summary = `Een persoonlijk bericht voor ${req.partnerName}.`;
   }
@@ -99,6 +118,8 @@ export async function assembleDraft(
     messageDraft,
     fulfilmentDetails,
     externalActionUrl,
+    providerName,
+    checklist,
   };
 }
 

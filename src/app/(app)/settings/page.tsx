@@ -14,7 +14,7 @@ export default async function SettingsPage() {
   return (
     <SettingsPanel
       user={user}
-      partnerName={partner?.name ?? null}
+      partner={partner}
       calendarProviders={(connections ?? []).map((c) => c.provider)}
     />
   );

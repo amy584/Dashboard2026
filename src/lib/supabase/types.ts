@@ -42,6 +42,10 @@ export type UserRow = Timestamps & {
   quiet_hours_end: number;
   daily_notification_cap: number;
   notifications_enabled: boolean;
+  address_line: string | null;
+  postal_code: string | null;
+  city: string | null;
+  phone: string | null;
 };
 
 export type PartnerRow = Timestamps & {
@@ -53,6 +57,9 @@ export type PartnerRow = Timestamps & {
   birthday: string | null;
   relationship_start_date: string | null;
   photo_url: string | null;
+  address_line: string | null;
+  postal_code: string | null;
+  city: string | null;
 };
 
 export type PartnerFactRow = Timestamps & {

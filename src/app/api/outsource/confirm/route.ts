@@ -3,7 +3,6 @@ import { getCurrentUser } from "@/server/db";
 import { createClient } from "@/lib/supabase/server";
 import { getCalendarProvider } from "@/server/providers/calendar/connection";
 import { getFulfilmentProvider } from "@/server/providers/fulfilment/draft";
-import { getPaymentProvider } from "@/server/providers/payment/stripe";
 import { getAIClient } from "@/server/providers/ai";
 import { executeConfirmed, type OutsourceDraft } from "@/server/outsource/service";
 import { logAudit } from "@/server/audit";
@@ -62,7 +61,8 @@ export async function POST(request: NextRequest) {
     {
       calendar,
       fulfilment: getFulfilmentProvider(),
-      payment: getPaymentProvider(),
+      // Concierge-prep: the user pays on the external site, so Attent never
+      // charges. Omitting the payment provider skips any Stripe charge.
       ai: getAIClient(),
     },
     {
