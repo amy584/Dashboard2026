@@ -18,6 +18,10 @@ export interface FulfilmentDraft {
   estimatedCostCents: number;
   /** A link/mailto the user can use to complete the booking himself in MVP. */
   externalActionUrl?: string;
+  /** Where the user finishes (e.g. "Topbloemen", or the restaurant name). */
+  providerName?: string;
+  /** Ready-to-enter lines so the user fills the external site in seconds. */
+  checklist?: string[];
   details: Record<string, unknown>;
 }
 

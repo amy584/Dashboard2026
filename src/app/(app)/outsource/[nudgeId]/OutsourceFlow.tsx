@@ -12,6 +12,8 @@ interface Draft {
   messageDraft: string;
   fulfilmentDetails: Record<string, unknown>;
   externalActionUrl?: string;
+  providerName?: string;
+  checklist?: string[];
 }
 
 function euro(cents: number) {
@@ -25,6 +27,7 @@ export function OutsourceFlow({ id, source }: { id: string; source: "nudge" | "s
   const [occasion, setOccasion] = useState("");
   const [message, setMessage] = useState("");
   const [manualTime, setManualTime] = useState("");
+  const [copied, setCopied] = useState(false);
   const [hasCalendar, setHasCalendar] = useState(true);
   const [phase, setPhase] = useState<"loading" | "review" | "done" | "failed">("loading");
   const [busy, setBusy] = useState(false);
@@ -131,17 +134,45 @@ export function OutsourceFlow({ id, source }: { id: string; source: "nudge" | "s
             </div>
           </div>
         )}
-        {draft?.externalActionUrl && (
-          <a
-            href={draft.externalActionUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-block text-sm text-terracotta underline"
-          >
-            {draft.kind === "reservation" ? "Reserveer" : "Bestel"} →
-          </a>
-        )}
       </section>
+
+      {draft && draft.checklist && draft.checklist.length > 0 && (
+        <section className="card border-l-4 border-terracotta">
+          <h2 className="font-display text-lg text-navy">{dict.outsource.prepTitle}</h2>
+          <ul className="mt-2 space-y-1.5">
+            {draft.checklist.map((line, i) => (
+              <li key={i} className="flex gap-2 text-sm text-navy/80">
+                <span className="text-terracotta">✓</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-sm text-navy/50">{dict.outsource.prepHelp}</p>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <button
+              className="btn-secondary"
+              onClick={() => {
+                navigator.clipboard?.writeText((draft.checklist ?? []).join("\n"));
+                setCopied(true);
+              }}
+            >
+              {copied ? dict.outsource.copied : dict.outsource.copyDetails}
+            </button>
+            {draft.externalActionUrl && (
+              <a
+                className="btn-primary text-center"
+                href={draft.externalActionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {draft.providerName
+                  ? t(dict.outsource.openAt, { provider: draft.providerName })
+                  : dict.outsource.openGeneric}
+              </a>
+            )}
+          </div>
+        </section>
+      )}
 
       <section className="card">
         <label className="label">{t(dict.outsource.messageTitle, { name: occasion })}</label>

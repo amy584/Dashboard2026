@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { enablePush } from "@/lib/push";
 import { dict } from "@/lib/i18n";
-import type { EscalationTone, UserRow } from "@/lib/supabase/types";
+import type { EscalationTone, PartnerRow, UserRow } from "@/lib/supabase/types";
 
 const TONES: { value: EscalationTone; label: string }[] = [
   { value: "gentle", label: dict.settings.toneGentle },
@@ -15,11 +15,11 @@ const TONES: { value: EscalationTone; label: string }[] = [
 
 export function SettingsPanel({
   user,
-  partnerName,
+  partner,
   calendarProviders,
 }: {
   user: UserRow;
-  partnerName: string | null;
+  partner: PartnerRow | null;
   calendarProviders: string[];
 }) {
   const supabase = createClient();
@@ -29,9 +29,29 @@ export function SettingsPanel({
   const [quietEnd, setQuietEnd] = useState(user.quiet_hours_end);
   const [savedAt, setSavedAt] = useState<number | null>(null);
 
+  // Address state (concierge-prep, Fase 3).
+  const [me, setMe] = useState({
+    address_line: user.address_line ?? "",
+    postal_code: user.postal_code ?? "",
+    city: user.city ?? "",
+    phone: user.phone ?? "",
+  });
+  const [her, setHer] = useState({
+    address_line: partner?.address_line ?? "",
+    postal_code: partner?.postal_code ?? "",
+    city: partner?.city ?? "",
+  });
+  const [addrSaved, setAddrSaved] = useState(false);
+
   async function savePrefs(next: Partial<UserRow>) {
     await supabase.from("users").update(next).eq("id", user.id);
     setSavedAt(Date.now());
+  }
+
+  async function saveAddresses() {
+    await supabase.from("users").update(me).eq("id", user.id);
+    if (partner) await supabase.from("partners").update(her).eq("id", partner.id);
+    setAddrSaved(true);
   }
 
   async function exportData() {
@@ -65,7 +85,7 @@ export function SettingsPanel({
 
       <Block title={dict.settings.account}>
         <Row label={dict.onboarding.aboutYou.firstName} value={user.first_name ?? "—"} />
-        <Row label={dict.settings.partner} value={partnerName ?? "—"} />
+        <Row label={dict.settings.partner} value={partner?.name ?? "—"} />
       </Block>
 
       <Block title={dict.settings.subscription}>
@@ -90,6 +110,40 @@ export function SettingsPanel({
             {dict.settings.connectGoogle}
           </a>
         )}
+      </Block>
+
+      <Block title={dict.settings.addresses}>
+        <p className="text-sm text-navy/55">{dict.settings.addressesHelp}</p>
+
+        <p className="label mt-4">{dict.settings.yourAddress}</p>
+        <div className="space-y-2">
+          <input className="field" placeholder={dict.settings.street} value={me.address_line}
+            onChange={(e) => { setMe({ ...me, address_line: e.target.value }); setAddrSaved(false); }} />
+          <div className="flex gap-2">
+            <input className="field" placeholder={dict.settings.postal} value={me.postal_code}
+              onChange={(e) => { setMe({ ...me, postal_code: e.target.value }); setAddrSaved(false); }} />
+            <input className="field" placeholder={dict.settings.cityField} value={me.city}
+              onChange={(e) => { setMe({ ...me, city: e.target.value }); setAddrSaved(false); }} />
+          </div>
+          <input className="field" placeholder={dict.settings.phone} value={me.phone}
+            onChange={(e) => { setMe({ ...me, phone: e.target.value }); setAddrSaved(false); }} />
+        </div>
+
+        <p className="label mt-4">{dict.settings.herAddress}</p>
+        <div className="space-y-2">
+          <input className="field" placeholder={dict.settings.street} value={her.address_line}
+            onChange={(e) => { setHer({ ...her, address_line: e.target.value }); setAddrSaved(false); }} />
+          <div className="flex gap-2">
+            <input className="field" placeholder={dict.settings.postal} value={her.postal_code}
+              onChange={(e) => { setHer({ ...her, postal_code: e.target.value }); setAddrSaved(false); }} />
+            <input className="field" placeholder={dict.settings.cityField} value={her.city}
+              onChange={(e) => { setHer({ ...her, city: e.target.value }); setAddrSaved(false); }} />
+          </div>
+        </div>
+
+        <button className="btn-primary mt-4 w-full" onClick={saveAddresses}>
+          {addrSaved ? dict.common.done : dict.common.save}
+        </button>
       </Block>
 
       <Block title={dict.settings.notifications}>

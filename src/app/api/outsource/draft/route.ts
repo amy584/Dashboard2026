@@ -79,6 +79,13 @@ export async function POST(request: NextRequest) {
       occasion,
       window: { from: from.toISOString(), to: to.toISOString() },
       manualTime,
+      recipient: {
+        name: partner?.name,
+        line: partner?.address_line,
+        postal: partner?.postal_code,
+        city: partner?.city,
+      },
+      sender: { name: user.first_name, phone: user.phone },
     },
   );
 
